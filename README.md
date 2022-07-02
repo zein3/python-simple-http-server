@@ -1,3 +1,3 @@
 # About
 
-A simple HTTP server written in Python.
+A very simple HTTP server written in Python.

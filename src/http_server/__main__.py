@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from socket import socket, AF_INET, SOCK_STREAM
-from . import request
+from .request import Request
+from .response import handle_request, bad_request
 
 PORT = 8080
 
@@ -19,12 +20,12 @@ def main():
     while True:
         connection, _ = server.accept()
         try:
-            req = request.Request(connection.recv(2048).decode())
+            request = Request(connection.recv(2048).decode())
         except Exception as ex:
-            connection.send('Fail!'.encode())
-            print('Fail to handle request:', ex)
+            connection.send(bad_request().encode())
+            print('Failed to handle request:', ex)
         else:
-            connection.send('OK!'.encode())
+            connection.send(handle_request(request).encode())
         finally:
             connection.close()
 
